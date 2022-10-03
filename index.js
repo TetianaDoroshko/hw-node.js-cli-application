@@ -16,6 +16,7 @@ const {
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 } = require("./contacts");
 
 async function invokeAction({ action, id, name, email, phone }) {
@@ -44,6 +45,12 @@ async function invokeAction({ action, id, name, email, phone }) {
       } finally {
         break;
       }
+
+    case "update":
+      const updatedContact = await updateContact(id, name, email, phone);
+      console.log(updatedContact);
+      break;
+
     default:
       console.warn("\x1B[31m Unknown action type!");
   }

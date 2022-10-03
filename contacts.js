@@ -35,4 +35,37 @@ async function addContact(name, email, phone) {
   return newContact;
 }
 
-module.exports = { listContacts, getContactById, removeContact, addContact };
+async function updateContact(
+  contactId,
+  name = null,
+  email = null,
+  phone = null
+) {
+  const contactList = await listContacts();
+  const updatedList = contactList.map((contact) => {
+    if (contact.id === contactId) {
+      if (name) {
+        return { ...contact, name: name };
+      }
+      if (email) {
+        return { ...contact, email: email };
+      }
+      if (phone) {
+        return { ...contact, phone: phone };
+      }
+    }
+    return contact;
+  });
+  await fs.writeFile(contactsPath, JSON.stringify(updatedList, null, 2));
+  const contact = updatedList.find((cont) => cont.id === contactId);
+
+  return contact;
+}
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+};
